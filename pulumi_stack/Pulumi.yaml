@@ -1,0 +1,6 @@
+name: proxmox_vms
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: A project for management VMs hosted on the proxmox server

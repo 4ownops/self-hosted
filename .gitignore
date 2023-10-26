@@ -1,0 +1,6 @@
+packer_cache
+__pycache__
+*.pyc
+venv
+
+sensitive.yaml
