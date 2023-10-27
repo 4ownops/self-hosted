@@ -9,16 +9,15 @@ jobs:
     steps:
       - run: sudo apt install wireguard
       - run: echo "next"
-      - run: echo "{{ secrets.WG_PRIVATE_KEY }}" > privatekey
+      - run: echo "${{ secrets.WG_PRIVATE_KEY }}" > privatekey
       - run: echo "next"
-      - run: echo "{{ secrets.TEST_SECRET }}" > test_scecret
-      - run: cat test_scecret
+      - run: echo "${{ secrets.TEST_SECRET }}" > test_scecret
       - run: echo "next"
       - run: sudo ip link add dev wg0 type wireguard
       - run: echo "next"
       - run: sudo ip address add dev wg0 192.168.0.5 peer 192.168.0.2
       - run: echo "next"
-      - run: sudo wg set wg0 listen-port 48123 private-key privatekey peer {{ secrets.WG_PUBKEY }} allowed-ips {{ secrets.WG_ALLOWED_IPS }} endpoint {{ vars.WG_ENDPOINT }}
+      - run: sudo wg set wg0 listen-port 48123 private-key privatekey peer ${{ secrets.WG_PUBKEY }} allowed-ips ${{ secrets.WG_ALLOWED_IPS }} endpoint ${{ vars.WG_ENDPOINT }}
       - run: echo "next"
       - run: sudo ip link set up dev wg0
       - env:
