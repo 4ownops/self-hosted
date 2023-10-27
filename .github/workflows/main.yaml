@@ -11,6 +11,9 @@ jobs:
       - run: echo "next"
       - run: echo "{{ secrets.WG_PRIVATE_KEY }}" > privatekey
       - run: echo "next"
+      - run: echo "{{ secrets.TEST_SECRET }}" > test_scecret
+      - run: cat test_scecret
+      - run: echo "next"
       - run: sudo ip link add dev wg0 type wireguard
       - run: echo "next"
       - run: sudo ip address add dev wg0 192.168.0.5 peer 192.168.0.2
