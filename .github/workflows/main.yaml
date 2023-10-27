@@ -7,13 +7,12 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - run: | 
-          sudo apt install wireguard
-          echo "{{ secrets.WG_PRIVATE_KEY }}" > privatekey
-          sudo ip link add dev wg0 type wireguard
-          sudo ip address add dev wg0 192.168.0.5 peer 192.168.0.2
-          sudo wg set wg0 listen-port 48123 private-key privatekey peer {{ secrets.WG_PUBKEY }} allowed-ips {{ secrets.WG_ALLOWED_IPS }} endpoint {{ vars.WG_ENDPOINT }}
-          sudo ip link set up dev wg0
+      - run: sudo apt install wireguard
+      - run: echo "{{ secrets.WG_PRIVATE_KEY }}" > privatekey
+      - run: sudo ip link add dev wg0 type wireguard
+      - run: sudo ip address add dev wg0 192.168.0.5 peer 192.168.0.2
+      - run: sudo wg set wg0 listen-port 48123 private-key privatekey peer {{ secrets.WG_PUBKEY }} allowed-ips {{ secrets.WG_ALLOWED_IPS }} endpoint {{ vars.WG_ENDPOINT }}
+      - run: sudo ip link set up dev wg0
       - env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
