@@ -10,12 +10,10 @@ jobs:
       - uses: actions/checkout@v3
       - run: | 
           sudo apt install wireguard
-          echo "${{ secrets.WG_PRIVATE_KEY }}" > privatekey
-          sudo ip link add dev wg0 type wireguard
-          sudo ip address add dev wg0 192.168.0.5 peer 192.168.0.2
-          sudo wg set wg0 listen-port 51820 private-key privatekey peer ${{ secrets.WG_PUBKEY }} allowed-ips ${{ secrets.WG_ALLOWED_IPS }} endpoint ${{ secrets.WG_ENDPOINT }}
-          sudo ip link set up dev wg0
+          echo "${{ secrets.WG_CONFIG }}" > config.cfg
+          sudo wg-quick up ./config.cfg
           sudo wg
+          ping -c 3 192.168.0.2
       - env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
