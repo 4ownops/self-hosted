@@ -23,4 +23,4 @@ jobs:
           ls -la
           cd scripts
           pip install -r requirements.txt
-          chmod +x pmx_delete_vm.py && pmx_delete_vm.py -vm_id 102
+          chmod +x pxmx_delete_vm.py && pxmx_delete_vm.py -vm_id 102
