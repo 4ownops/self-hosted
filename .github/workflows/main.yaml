@@ -17,8 +17,6 @@ jobs:
           sudo wg-quick up ./wg0.conf
           sudo wg show
           sudo ip a
-          echo "PAUSE 30s"
-          sleep 
           curl -k https://192.168.0.30:8006
       - env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
