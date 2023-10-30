@@ -16,7 +16,7 @@ jobs:
           sudo wg
           sudo ip a
           echo "PAUSE 30s"
-          pause 30
+          sleep 30
       - env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
