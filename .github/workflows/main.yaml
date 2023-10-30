@@ -3,7 +3,7 @@ name: packer run
 on: 
   push:
     branches: 
-      - 'dev'
+      - 'dev1'
 
 jobs:
   run:
