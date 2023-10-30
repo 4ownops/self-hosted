@@ -18,7 +18,8 @@ jobs:
           sudo wg show
           sudo ip a
           echo "PAUSE 30s"
-          sleep 30
+          sleep 
+          curl -k https://192.168.0.30:8006
       - env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
