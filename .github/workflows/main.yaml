@@ -11,9 +11,12 @@ jobs:
       - run: | 
           sudo apt install wireguard
           echo "${{ secrets.WG_CONFIG }}" > config.conf
+          chmod 600 ./config.conf
           sudo wg-quick up ./config.conf
           sudo wg
-          ping -c 3 192.168.0.2
+          sudo ip a
+          echo "PAUSE 30s"
+          pause 30
       - env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
