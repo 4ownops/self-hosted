@@ -108,7 +108,7 @@ source "proxmox-iso" "debian" {
   iso_file       = var.iso_file
   http_directory = "./"
   boot_wait      = "10s"
-  boot_command   = ["<esc><wait>auto url=tftp://${tftp_server_address}/preseed/vm4.cfg<enter>"]
+  boot_command   = ["<esc><wait>auto url=tftp://${var.tftp_server_address}/preseed/vm4.cfg<enter>"]
   unmount_iso    = true
 
   cloud_init              = true
