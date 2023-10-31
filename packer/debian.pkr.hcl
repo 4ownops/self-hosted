@@ -78,7 +78,7 @@ variable "tftp_server_address" {
 }
 
 variable "vm_id" {
-  type = int
+  type = number
   default = 102
 }
 
