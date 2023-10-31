@@ -7,16 +7,15 @@ on:
 
 jobs:
   run:
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: | 
           sudo apt install wireguard
-          sudo echo "${{ secrets.WG_CONFIG }}" > ./wg0.conf
-          sudo chmod 600 ./wg0.conf
-          sudo wg-quick up ./wg0.conf
-          sudo wg show
-          sudo ip a
+          sudo echo "${{ secrets.WG_CONFIG }}" > wg0.conf
+          sudo chmod 600 wg0.conf
+          sudo wg-quick up wg0.conf
           curl -k https://192.168.0.30:8006
       - env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
