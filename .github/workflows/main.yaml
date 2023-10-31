@@ -1,4 +1,4 @@
-name: packer run
+name: Create VM template
 
 on: 
   push:
@@ -13,7 +13,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set up WireGuard
         run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
-        shell: bash
         env:
           ARG_ENDPOINT: ${{ secrets.WG_ENDPOINT }}
           ARG_ENDPOINT_PUBLIC_KEY: ${{ secrets.WG_PUBKEY }}
@@ -22,16 +21,21 @@ jobs:
           ARG_PRIVATE_KEY: ${{ secrets.WG_PRIVATE_KEY }}
           ARG_PRESHARED_KEY: ${{ secrets.WG_PRESHARED_KEY }}
           ARG_KEEPALIVE: 25
-      - name: Test connection
-        run: |
-          ping -c 4 192.168.0.2
-          curl -k https://192.168.0.30:8006
-      - name: Run deletion
+      - name: Packer run
         env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
           PROXMOX_PASSWORD: ${{ secrets.PROXMOX_API_PASSWORD }}
+          VM_ID: 102
         run: | 
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo sudo apt-get install packer
           cd scripts
           pip install -r requirements.txt
-          chmod +x pxmx_delete_vm.py && python pxmx_delete_vm.py -vm_id 102
+          chmod +x pxmx_delete_vm.py && python pxmx_delete_vm.py -vm_id $VM_ID
+          cd ../packer
+          sed -i "s/\${proxmox_api_user}/$PROXMOX_API_USER/g" variables.auto.pkrvars.hcl
+          sed -i "s/\${proxmox_api_password}/$PROXMOX_API_PASSWORD/g" variables.auto.pkrvars.hcl
+          sed -i "s/\${ansible_user_public_key}/${{ secrets.ANSIBLE_USER_PUBLIC_KEY }}/g" preseed.cfg
+          packer build .
