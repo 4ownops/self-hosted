@@ -17,7 +17,7 @@ jobs:
           endpoint: '${{ secrets.WG_ENDPOINT }}'
           endpoint_public_key: '${{ secrets.WG_PUBKEY }}'
           ips: '${{ secrets.IPS }}'
-          allowed_ips: '${{ secrets.WG_ALLOWED_IPS }}'
+          allowed_ips: '192.168.0.0/24'
           private_key: '${{ secrets.WG_PRIVATE_KEY }}'
           preshared_key: '${{ secrets.WG_PRESHARED_KEY }}'
       - name: Test connection
