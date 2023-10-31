@@ -12,14 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up WireGuard
-        uses: egor-tensin/setup-wireguard@v1
-        with:
-          endpoint: '${{ secrets.WG_ENDPOINT }}'
-          endpoint_public_key: '${{ secrets.WG_PUBKEY }}'
-          ips: '${{ secrets.IPS }}'
-          allowed_ips: '192.168.0.0/24'
-          private_key: '${{ secrets.WG_PRIVATE_KEY }}'
-          preshared_key: '${{ secrets.WG_PRESHARED_KEY }}'
+        run: scripts/wg_setup.sh
+        shell: bash
+        env:
+          ARG_ENDPOINT: ${{ secrets.WG_ENDPOINT }}
+          ARG_ENDPOINT_PUBLIC_KEY: ${{ secrets.WG_PUBKEY }}
+          ARG_ASSIGNED_IPS: 192.168.0.5
+          ARG_ALLOWED_IPS: 192.168.0.0/24
+          ARG_PRIVATE_KEY: ${{ secrets.WG_PRIVATE_KEY }}
+          ARG_PRESHARED_KEY: ${{ secrets.WG_PRESHARED_KEY }}
+          ARG_KEEPALIVE: 25
       - name: Test connection
         run: |
           ping -c 4 192.168.0.2
@@ -30,7 +32,6 @@ jobs:
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
           PROXMOX_PASSWORD: ${{ secrets.PROXMOX_API_PASSWORD }}
         run: | 
-
           cd scripts
           pip install -r requirements.txt
           chmod +x pxmx_delete_vm.py && python pxmx_delete_vm.py -vm_id 102
