@@ -35,10 +35,10 @@ jobs:
           chmod +x pxmx_delete_vm.py && python pxmx_delete_vm.py -vm_id $VM_ID
           cd ../packer
           echo "first"
-          sed -i "s@\${proxmox_api_user}@${PROXMOX_USER}@g" variables.auto.pkrvars.hcl
+          sed -i "s/\${proxmox_api_user}/$PROXMOX_USER/g" variables.auto.pkrvars.hcl
           echo "second"
-          sed -i "s@\${proxmox_api_password}@${PROXMOX_PASSWORD}@g" variables.auto.pkrvars.hcl
+          sed -i "s/\${proxmox_api_password}/${PROXMOX_PASSWORD}/g" variables.auto.pkrvars.hcl
           echo "third"
-          sed -i "s@\${ansible_user_public_key}@${{ secrets.ANSIBLE_USER_PUBLIC_KEY }}@g" preseed.cfg
+          sed -i "s/\${ansible_user_public_key}/${{ secrets.ANSIBLE_USER_PUBLIC_KEY }}/g" preseed.cfg
           packer init ./debian.pkr.hcl
           packer build .
