@@ -3,7 +3,7 @@ set -o errexit -o pipefail -o nounset
 
 readonly endpoint="$ARG_ENDPOINT"
 readonly endpoint_public_key="$ARG_ENDPOINT_PUBLIC_KEY"
-readonly ips="$ARG_ASSIGNED_IPS"
+readonly ip_addr="$ARG_ASSIGNED_IP"
 readonly allowed_ips="$ARG_ALLOWED_IPS"
 readonly private_key="$ARG_PRIVATE_KEY"
 readonly preshared_key="$ARG_PRESHARED_KEY"
@@ -17,19 +17,6 @@ readonly ifname
 port="$( shuf "--input-range=$minport-$maxport" --head-count=1 )"
 readonly port
 
-install_wg_tools() {
-  sudo apt-get update || sudo yum update -y
-  if command -v apt-get >/dev/null 2>&1; then
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends wireguard-tools resolvconf
-  elif command -v yum >/dev/null 2>&1; then
-    sudo amazon-linux-extras install -y epel
-    sudo yum install -y wireguard-tools
-  else
-    echo "Unsupported package manager"
-    exit 1
-  fi
-}
-
 readonly private_key_path=/tmp/private.key
 readonly preshared_key_path=/tmp/preshared.key
 
@@ -39,7 +26,8 @@ wg_tools_cleanup() {
 }
 
 via_wg_tools() {
-    install_wg_tools
+    sudo apt-get update
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends wireguard-tools resolvconf
     trap wg_tools_cleanup EXIT
 
     (
@@ -52,13 +40,7 @@ via_wg_tools() {
     )
 
     sudo ip link add dev "$ifname" type wireguard
-
-    local delim=,
-    local ip
-    while IFS= read -d "$delim" -r ip; do
-        sudo ip addr add "$ip" dev "$ifname"
-    done < <( printf -- "%s$delim\\0" "$ips" )
-
+    sudo ip addr add "$ip_addr" dev "$ifname"
     sudo wg set "$ifname" \
         listen-port "$port" \
         private-key "$private_key_path"
