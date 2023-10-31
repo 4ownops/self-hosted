@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up WireGuard
-        run: scripts/wg_setup.sh
+        run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
         shell: bash
         env:
           ARG_ENDPOINT: ${{ secrets.WG_ENDPOINT }}
