@@ -20,7 +20,7 @@ readonly port
 install_wg_tools() {
   sudo apt-get update || sudo yum update -y
   if command -v apt-get >/dev/null 2>&1; then
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends wireguard-tools
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends wireguard-tools resolvconf
   elif command -v yum >/dev/null 2>&1; then
     sudo amazon-linux-extras install -y epel
     sudo yum install -y wireguard-tools
@@ -83,6 +83,7 @@ via_wg_tools() {
 
     # Add routes for allowed_ips
     for i in ${allowed_ips//,/ }; do sudo ip route replace "$i" dev "$ifname"; done
+    echo 'nameserver 192.168.0.2' | sudo tee -a /etc/resolv.conf
 }
 
 via_wg_tools
