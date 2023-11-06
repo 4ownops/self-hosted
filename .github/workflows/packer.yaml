@@ -1,11 +1,32 @@
 name: Create VM template
 
-on: 
-  push:
-    branches: 
-      - 'dev1'
+on:
+  workflow_dispatch:
+    inputs:
+      pipeline_path:
+        description: 'VM pipeline (see in packer directory)'
+        required: true
+        type: choice
+        options:
+          - basic-debian-12.1.0-amd64-netinst
+          - k3s-debian-12.1.0-amd64-netinst
 
 jobs:
+  init:
+    runs-on: ubuntu-latest
+    outputs:
+      vm_id: ${{ steps.setvars.outputs.vm_id }}
+    steps:
+      - name: Set variables
+        id: setvars
+        run: |
+          if [[ "${{ inputs.pipeline_path }}" == "k3s"* ]]; then
+            echo "::set-output name=vm_id::103"
+          fi
+
+          if [[ "${{ inputs.pipeline_path }}" == "basic"* ]]; then
+            echo "::set-output name=vm_id::102"
+          fi
   run:
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +46,7 @@ jobs:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
           PROXMOX_PASSWORD: ${{ secrets.PROXMOX_API_PASSWORD }}
-          VM_ID: 102
+          VM_ID: ${{needs.init.outputs.vm_id}}
         run: | 
           curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
           sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
@@ -33,12 +54,9 @@ jobs:
           cd scripts
           pip install -r requirements.txt
           chmod +x pxmx_delete_vm.py && python pxmx_delete_vm.py -vm_id $VM_ID
-          cd ../packer
-          echo "first"
+          cd ../packer/${{ inputs.pipeline_path }}
           sed -i "s/\${proxmox_api_user}/$PROXMOX_USER/g" variables.auto.pkrvars.hcl
-          echo "second"
-          sed -i "s/\${proxmox_api_password}/${PROXMOX_PASSWORD}/g" variables.auto.pkrvars.hcl
-          echo "third"
+          sed -i "s/\${proxmox_api_password}/$PROXMOX_PASSWORD/g" variables.auto.pkrvars.hcl
           sed -i "s/\${ansible_user_public_key}/${{ secrets.ANSIBLE_USER_PUBLIC_KEY }}/g" preseed.cfg
           packer init ./debian.pkr.hcl
           packer build .
