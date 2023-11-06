@@ -79,7 +79,6 @@ variable "tftp_server_address" {
 
 variable "vm_id" {
   type = number
-  default = ""
 }
 
 source "proxmox-iso" "debian" {
