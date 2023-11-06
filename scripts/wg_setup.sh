@@ -66,6 +66,8 @@ via_wg_tools() {
     # Add routes for allowed_ips
     for i in ${allowed_ips//,/ }; do sudo ip route replace "$i" dev "$ifname"; done
     echo 'nameserver 192.168.0.2' | sudo tee -a /etc/resolv.conf
+    ping -c4 192.168.0.25
+    ping -c3 proxmox
 }
 
 via_wg_tools

@@ -17,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up WireGuard
-        run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
         env:
           ARG_ENDPOINT: ${{ secrets.WG_ENDPOINT }}
           ARG_ENDPOINT_PUBLIC_KEY: ${{ secrets.WG_PUBKEY }}
@@ -26,6 +25,7 @@ jobs:
           ARG_PRIVATE_KEY: ${{ secrets.WG_PRIVATE_KEY }}
           ARG_PRESHARED_KEY: ${{ secrets.WG_PRESHARED_KEY }}
           ARG_KEEPALIVE: 25
+        run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
       - name: Packer run
         env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
