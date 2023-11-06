@@ -21,11 +21,13 @@ jobs:
         id: setvars
         run: |
           if [[ "${{ inputs.pipeline_path }}" == "k3s"* ]]; then
-            echo "::set-output name=vm_id::103"
+            echo "vm_id=103" >> $GITHUB_OUTPUT
+            echo "k3s is found. vm_id=103"
           fi
 
           if [[ "${{ inputs.pipeline_path }}" == "basic"* ]]; then
-            echo "::set-output name=vm_id::102"
+            echo "vm_id=102" >> $GITHUB_OUTPUT
+            echo "basic is found. vm_id=102"
           fi
   run:
     runs-on: ubuntu-latest
@@ -46,13 +48,14 @@ jobs:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
           PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
           PROXMOX_PASSWORD: ${{ secrets.PROXMOX_API_PASSWORD }}
-          VM_ID: ${{needs.init.outputs.vm_id}}
+          VM_ID: ${{ needs.init.outputs.vm_id }}
         run: | 
           curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
           sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
           sudo sudo apt-get install packer
           cd scripts
           pip install -r requirements.txt
+          echo "VM_ID = $VM_ID"
           chmod +x pxmx_delete_vm.py && python pxmx_delete_vm.py -vm_id $VM_ID
           cd ../packer/${{ inputs.pipeline_path }}
           sed -i "s/\${proxmox_api_user}/$PROXMOX_USER/g" variables.auto.pkrvars.hcl
