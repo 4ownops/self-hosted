@@ -77,6 +77,11 @@ variable "tftp_server_address" {
   type = string
 }
 
+variable "vm_id" {
+  type = number
+  default = 102
+}
+
 source "proxmox-iso" "debian" {
   proxmox_url              = "https://${var.proxmox_host}/api2/json"
   insecure_skip_tls_verify = true
@@ -103,13 +108,14 @@ source "proxmox-iso" "debian" {
   iso_file       = var.iso_file
   http_directory = "./"
   boot_wait      = "10s"
-  boot_command   = ["<esc><wait>auto url=tftp://${tftp_server_address}/preseed/vm4.cfg<enter>"]
+  boot_command   = ["<esc><wait>auto url=tftp://${var.tftp_server_address}/preseed/vm4.cfg<enter>"]
   unmount_iso    = true
 
   cloud_init              = true
   cloud_init_storage_pool = var.cloudinit_storage_pool
 
   vm_name  = trimsuffix(basename(var.iso_file), ".iso")
+  vm_id    = var.vm_id
   cpu_type = var.cpu_type
   os       = "l26"
   memory   = var.memory

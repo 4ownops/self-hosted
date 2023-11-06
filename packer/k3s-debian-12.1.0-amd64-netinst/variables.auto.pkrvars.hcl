@@ -7,3 +7,4 @@ iso_file               = "templates:iso/debian-12.1.0-amd64-netinst.iso"
 cloudinit_storage_pool = "data"
 disk_storage_pool      = "disks"
 tftp_server_address    = "linksys"
+vm_id                  = 103
