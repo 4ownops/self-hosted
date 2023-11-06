@@ -12,26 +12,21 @@ on:
           - k3s-debian-12.1.0-amd64-netinst
 
 jobs:
-  init:
+  run:
     runs-on: ubuntu-latest
-    outputs:
-      vm_id: ${{ steps.setvars.outputs.vm_id }}
     steps:
       - name: Set variables
         id: setvars
         run: |
           if [[ "${{ inputs.pipeline_path }}" == "k3s"* ]]; then
-            echo "vm_id=103" >> $GITHUB_OUTPUT
+            VM_ID=103
             echo "k3s is found. vm_id=103"
           fi
 
           if [[ "${{ inputs.pipeline_path }}" == "basic"* ]]; then
-            echo "vm_id=102" >> $GITHUB_OUTPUT
+            VM_ID=102
             echo "basic is found. vm_id=102"
           fi
-  run:
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v3
       - name: Set up WireGuard
         run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
@@ -54,7 +49,6 @@ jobs:
           sudo sudo apt-get install packer
           cd scripts
           pip install -r requirements.txt
-          VM_ID=${{ needs.init.outputs.vm_id }}
           echo "VM_ID = $VM_ID"
           chmod +x pxmx_delete_vm.py && python pxmx_delete_vm.py -vm_id $VM_ID
           cd ../packer/${{ inputs.pipeline_path }}
