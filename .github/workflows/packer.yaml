@@ -19,12 +19,12 @@ jobs:
         id: setvars
         run: |
           if [[ "${{ inputs.pipeline_path }}" == "k3s"* ]]; then
-            VM_ID=103
+            export VM_ID=103
             echo "k3s is found. vm_id=103"
           fi
 
           if [[ "${{ inputs.pipeline_path }}" == "basic"* ]]; then
-            VM_ID=102
+            export VM_ID=102
             echo "basic is found. vm_id=102"
           fi
       - uses: actions/checkout@v3
