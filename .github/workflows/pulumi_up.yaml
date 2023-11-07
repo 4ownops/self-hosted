@@ -25,7 +25,7 @@ jobs:
         with:
           work-dir: pulumi_stack
           command: up
-          stack-name: 4ownops/proxmox_vms # When using an individual account, only use stack-name.
+          stack-name: 4ownops/proxmox
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}
