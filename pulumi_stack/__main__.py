@@ -4,18 +4,18 @@ from os import environ
 
 provider = proxmox.Provider(
         resource_name="proxmox_provider",
-        endpoint="https://proxmox:8006",
+        endpoint="https://{environ.get('PROXMOX_URL')}",
         insecure="true",
-        username=environ.get("proxmox_api_user"),
-        password=environ.get("proxmox_api_password")
+        username=environ.get("PROXMOX_API_USER"),
+        password=environ.get("PROXMOX_API_PASSWORD")
 )
 
 virtual_machine = proxmox.vm.VirtualMachine(
     opts=ResourceOptions(provider=provider),
-    name="giteaserver",
+    name="k3smaster01",
     resource_name="vm",
     node_name="pve",
-    vm_id="5000",
+    vm_id="1001",
     agent=proxmox.vm.VirtualMachineAgentArgs(
         enabled=True,
         trim=True,
@@ -23,29 +23,30 @@ virtual_machine = proxmox.vm.VirtualMachine(
     ),
     bios="seabios",
     cpu=proxmox.vm.VirtualMachineCpuArgs(
-        cores=1,
+        cores=2,
         sockets=1
     ),
     clone=proxmox.vm.VirtualMachineCloneArgs(
         node_name="pve",
-        vm_id=102,
+        vm_id=103,
         full=True
     ),
     disks=[
         proxmox.vm.VirtualMachineDiskArgs(
             interface="scsi0",
             datastore_id="disks",
-            size=30,
+            size=20,
             file_format="raw"
         )
     ],
     memory=proxmox.vm.VirtualMachineMemoryArgs(
-        dedicated=1024
+        dedicated=2048
     ),
     network_devices=[
         proxmox.vm.VirtualMachineNetworkDeviceArgs(
             bridge="vmbr0",
-            model="virtio"
+            model="virtio",
+            mac_address="EA:53:B3:9F:A2:01"
         )
     ],
     on_boot=True,
