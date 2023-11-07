@@ -4,10 +4,10 @@ from os import environ
 
 provider = proxmox.Provider(
         resource_name="proxmox_provider",
-        endpoint="https://{environ.get('PROXMOX_URL')}",
+        endpoint=f"https://{environ.get('PROXMOX_URL')}",
         insecure="true",
-        username=environ.get("PROXMOX_API_USER"),
-        password=environ.get("PROXMOX_API_PASSWORD")
+        username=environ.get("PROXMOX_USER"),
+        password=environ.get("PROXMOX_PASSWORD")
 )
 
 virtual_machine = proxmox.vm.VirtualMachine(

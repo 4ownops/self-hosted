@@ -9,18 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version: 3.10
-      - uses: ./.github/actions/wireguard_setup.yaml
+          python-version: '3.10'
+      - uses: ./.github/actions/wireguard_setup
+        with:
+          endpoint: ${{ secrets.WG_ENDPOINT }}
+          public_key: ${{ secrets.WG_PUBKEY }}
+          private_key: ${{ secrets.WG_PRIVATE_KEY }}
+          preshared_key: ${{ secrets.WG_PRESHARED_KEY }}
       - run: | 
           cd pulumi_stack
           pip install -r requirements.txt
-      - uses: pulumi/actions@v3
+      - uses: pulumi/actions@v4
         with:
           work-dir: pulumi_stack
           command: up
-          stack-name: 4ownops/proxmox_vms # When using an individual account, only use stack-name.
+          stack-name: 4ownops/proxmox
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}

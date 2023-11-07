@@ -7,7 +7,6 @@ readonly ip_addr="$ARG_ASSIGNED_IP"
 readonly allowed_ips="$ARG_ALLOWED_IPS"
 readonly private_key="$ARG_PRIVATE_KEY"
 readonly preshared_key="$ARG_PRESHARED_KEY"
-readonly keepalive="$ARG_KEEPALIVE"
 
 readonly minport=51000
 readonly maxport=51999
@@ -51,14 +50,11 @@ via_wg_tools() {
         additional_wg_args+=(preshared-key "${preshared_key_path}")
     fi
 
-    if [ -n "$keepalive" ]; then
-        additional_wg_args+=(persistent-keepalive "${keepalive}")
-    fi
-
     sudo wg set "$ifname" \
         peer "$endpoint_public_key" \
         endpoint "$endpoint" \
         allowed-ips "$allowed_ips" \
+        persistent-keepalive "25" \
         "${additional_wg_args[@]}"
 
     sudo ip link set "$ifname" up
