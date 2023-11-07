@@ -1,4 +1,5 @@
 name: Wireguard set up
+description: Setting up wireguard
 
 runs:
   using: composite
