@@ -1,0 +1,14 @@
+name: Wireguard set up
+
+runs:
+  using: composite
+  steps:
+    - env:
+        ARG_ENDPOINT: ${{ secrets.WG_ENDPOINT }}
+        ARG_ENDPOINT_PUBLIC_KEY: ${{ secrets.WG_PUBKEY }}
+        ARG_ASSIGNED_IP: 192.168.0.5
+        ARG_ALLOWED_IPS: 192.168.0.0/24
+        ARG_PRIVATE_KEY: ${{ secrets.WG_PRIVATE_KEY }}
+        ARG_PRESHARED_KEY: ${{ secrets.WG_PRESHARED_KEY }}
+        ARG_KEEPALIVE: 25
+      run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
