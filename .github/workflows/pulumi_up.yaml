@@ -21,7 +21,7 @@ jobs:
       - run: | 
           cd pulumi_stack
           pip install -r requirements.txt
-      - uses: pulumi/actions@v3
+      - uses: pulumi/actions@v4
         with:
           work-dir: pulumi_stack
           command: up

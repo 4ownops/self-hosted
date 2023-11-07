@@ -18,10 +18,11 @@ jobs:
             public_key: ${{ secrets.WG_PUBKEY }}
             private_key: ${{ secrets.WG_PRIVATE_KEY }}
             preshared_key: ${{ secrets.WG_PRESHARED_KEY }}
-        - run: |
+        - name: install requirements
+          run: |
             cd pulumi_stack
             pip install -r requirements.txt
-        - uses: pulumi/actions@v3
+        - uses: pulumi/actions@v4
           with:
             work-dir: pulumi_stack
             command: preview
