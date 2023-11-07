@@ -50,14 +50,11 @@ via_wg_tools() {
         additional_wg_args+=(preshared-key "${preshared_key_path}")
     fi
 
-    if [ -n "$keepalive" ]; then
-        additional_wg_args+=(persistent-keepalive "25")
-    fi
-
     sudo wg set "$ifname" \
         peer "$endpoint_public_key" \
         endpoint "$endpoint" \
         allowed-ips "$allowed_ips" \
+        persistent-keepalive "25" \
         "${additional_wg_args[@]}"
 
     sudo ip link set "$ifname" up
