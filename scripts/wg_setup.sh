@@ -7,7 +7,6 @@ readonly ip_addr="$ARG_ASSIGNED_IP"
 readonly allowed_ips="$ARG_ALLOWED_IPS"
 readonly private_key="$ARG_PRIVATE_KEY"
 readonly preshared_key="$ARG_PRESHARED_KEY"
-readonly keepalive="$ARG_KEEPALIVE"
 
 readonly minport=51000
 readonly maxport=51999
@@ -52,7 +51,7 @@ via_wg_tools() {
     fi
 
     if [ -n "$keepalive" ]; then
-        additional_wg_args+=(persistent-keepalive "${keepalive}")
+        additional_wg_args+=(persistent-keepalive "25")
     fi
 
     sudo wg set "$ifname" \
