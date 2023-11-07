@@ -26,12 +26,11 @@ runs:
     - uses: actions/checkout@v3
     - name: Wireguard connection
       shell: bash
-      working-directory: ./scripts
       env:
         ARG_ENDPOINT: ${{ inputs.endpoint }}
-        ARG_ENDPOINT_PUBLIC_KEY: ${{ inputs.pubkey }}
+        ARG_ENDPOINT_PUBLIC_KEY: ${{ inputs.public_key }}
         ARG_ASSIGNED_IP: ${{ inputs.assigned_ip }}
         ARG_ALLOWED_IPS: ${{ inputs.allowed_ips }}
         ARG_PRIVATE_KEY: ${{ inputs.private_key }}
         ARG_PRESHARED_KEY: ${{ inputs.preshared_key }}
-      run: chmod +x wg_setup.sh && wg_setup.sh
+      run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
