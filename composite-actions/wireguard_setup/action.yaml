@@ -4,6 +4,7 @@ description: Setting up wireguard
 runs:
   using: composite
   steps:
+    - uses: actions/checkout@v3
     - env:
         ARG_ENDPOINT: ${{ secrets.WG_ENDPOINT }}
         ARG_ENDPOINT_PUBLIC_KEY: ${{ secrets.WG_PUBKEY }}
