@@ -1,0 +1,30 @@
+name: Pulumi Up
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+      - uses: 4ownops/self-hosted/actions/wireguard_setup.yaml
+      - run: | 
+          cd pulumi_stack
+          pip install -r requirements.txt
+      - uses: pulumi/actions@v3
+        with:
+          work-dir: pulumi_stack
+          command: up
+          stack-name: 4ownops/proxmox_vms # When using an individual account, only use stack-name.
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PROXMOX_URL: ${{ vars.PROXMOX_URL }}
+          PROXMOX_USER: ${{ secrets.PROXMOX_API_USER }}
+          PROXMOX_PASSWORD: ${{ secrets.PROXMOX_API_PASSWORD }}
+
+      
