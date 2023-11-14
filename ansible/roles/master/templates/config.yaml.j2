@@ -15,4 +15,4 @@ disable:
     - servicelb
 protect-kernel-defaults: true
 secrets-encryption: true
-agent-token: "{{ lookup('env', 'secret.K3S_TOKEN' }}"
+agent-token: "{{ lookup('env', 'secret.K3S_TOKEN') }}"
