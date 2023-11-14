@@ -32,9 +32,9 @@ jobs:
     - name: Run Ansible Playbook
       env:
         K3S_TOKEN: ${{secrets.K3S_TOKEN}}
+        ANSIBLE_HOST_KEY_CHECKING: "False"
       run: |
         sudo apt update
         sudo apt install -y ansible
-        rm ~/.ssh/known_hosts
         cd ansible
         ansible-playbook -i inventory.yaml site.yaml --private-key=private_key.pem --user=${{ secrets.ANSIBLE_USER }}
