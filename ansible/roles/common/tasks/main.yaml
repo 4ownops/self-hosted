@@ -1,6 +1,6 @@
 - name: Set a hostname
   ansible.builtin.hostname:
-    name: {{ inventory_hostname }}
+    name: "{{ inventory_hostname }}"
     use: debian
   notify: 
     - Restart server
@@ -9,7 +9,7 @@
 - name: k3s config directories
   become: true
   ansible.builtin.file:
-   path: '{{ item.path }}'
+   path: "{{ item.path }}"
    state: directory
   loop:
    - { path: /etc/rancher/k3s.config.d }
