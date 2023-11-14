@@ -1,0 +1,35 @@
+name: Run Ansible Playbook
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Wireguard set up
+      uses: ./.github/actions/wireguard_setup
+      with:
+        endpoint: ${{ secrets.WG_ENDPOINT }}
+        public_key: ${{ secrets.WG_PUBKEY }}
+        private_key: ${{ secrets.WG_PRIVATE_KEY }}
+        preshared_key: ${{ secrets.WG_PRESHARED_KEY }}
+    - name: Setting up SSH key
+      run: |
+        echo "${{ secrets.ANSIBLE_USER_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: eu-central-1
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github_actions_ansible_role
+        role-session-name: aws
+    - name: Run Ansible Playbook
+      env:
+        K3S_TOKEN: ${{secrets.K3S_TOKEN}}
+      run: |
+        sudo apt update
+        sudo apt install -y ansible
+        ansible-playbook -i site.yaml --private-key=private_key.pem --user=${{ secrets.ANSIBLE_USER }}

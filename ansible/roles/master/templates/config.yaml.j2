@@ -1,0 +1,18 @@
+# k3sserver01
+
+cluster-domain: "{{ cluster_domain }}"
+tls-san:
+    - "{{ inventory_hostname }}.{{ cluster_domain }}"
+flannel-backend: host-gw
+bind-address: "0.0.0.0"
+https-listen-port: 6443
+node-taint:
+    - "k3s-controlplane=true:NoExecute"
+log: "/var/log/k3s.log"
+kubelet-arg: "config=/etc/rancher/k3s/kubelet.config"
+disable:
+    - metrics-server
+    - servicelb
+protect-kernel-defaults: true
+secrets-encryption: true
+agent-token: "{{ lookup('env', 'secret.K3S_TOKEN' }}"
