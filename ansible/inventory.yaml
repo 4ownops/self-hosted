@@ -1,0 +1,12 @@
+k3sagents:
+  hosts:
+    k3sagent03:
+      ansible_host: k3sagent03.home
+      hostname: k3sagent03
+
+k3smasters:
+  hosts:
+    k3smaster01:
+      ansible_host: k3smaster01.home
+      hostname: k3smaster01
+

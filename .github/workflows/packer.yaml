@@ -16,16 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up WireGuard
-        env:
-          ARG_ENDPOINT: ${{ secrets.WG_ENDPOINT }}
-          ARG_ENDPOINT_PUBLIC_KEY: ${{ secrets.WG_PUBKEY }}
-          ARG_ASSIGNED_IP: 192.168.0.5
-          ARG_ALLOWED_IPS: 192.168.0.0/24
-          ARG_PRIVATE_KEY: ${{ secrets.WG_PRIVATE_KEY }}
-          ARG_PRESHARED_KEY: ${{ secrets.WG_PRESHARED_KEY }}
-          ARG_KEEPALIVE: 25
-        run: chmod +x scripts/wg_setup.sh && scripts/wg_setup.sh
+      - uses: ./.github/actions/wireguard_setup
+        with:
+          endpoint: ${{ secrets.WG_ENDPOINT }}
+          public_key: ${{ secrets.WG_PUBKEY }}
+          private_key: ${{ secrets.WG_PRIVATE_KEY }}
+          preshared_key: ${{ secrets.WG_PRESHARED_KEY }}
       - name: Packer run
         env:
           PROXMOX_URL: ${{ vars.PROXMOX_URL }}

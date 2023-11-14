@@ -1,0 +1,24 @@
+- name: copy cleanup service file
+  become: true
+  ansible.builtin.copy:
+   src: files/k3s-cleanup.service
+   dest: /lib/systemd/system/k3s-cleanup.service
+
+- name: create k3s config.yaml
+  become: true
+  ansible.builtin.template:
+   src: templates/config.yaml.j2
+   dest: /etc/rancher/k3s.config.d/config.yaml
+
+- name: install k3s
+  become: true
+  run_once: true
+  ansible.builtin.command:
+    cmd: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
+
+- name: Create\update k3s token
+  community.aws.ssm_parameter:
+    name: "self_hosted/k3s_token"
+    description: "token for k3s"
+    string_type: "SecureString"
+    value: "{{lookup('ansible.builtin.file', '/var/lib/rancher/k3s/server/token') }}"
