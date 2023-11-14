@@ -37,4 +37,4 @@ jobs:
         sudo apt update
         sudo apt install -y ansible
         cd ansible
-        ansible-playbook -i inventory.yaml site.yaml --private-key=private_key.pem --user=${{ secrets.ANSIBLE_USER }}
+        ansible-playbook -i inventory.yaml site.yaml --private-key=../private_key.pem --user=${{ secrets.ANSIBLE_USER }}
