@@ -14,7 +14,7 @@
   become: true
   run_once: true
   ansible.builtin.command:
-    cmd: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
+    shell: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
 
 - name: Create\update k3s token
   community.aws.ssm_parameter:
