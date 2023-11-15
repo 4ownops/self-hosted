@@ -1,5 +1,3 @@
 domain: home
 cluster_domain: k3s.home
 k3s_master_ip: 192.168.0.51
-AWS_ACCESS_KEY_ID: lookup('env', 'ANSIBLE_AWS_ACCESS_KEY')
-AWS_SECRET_ACCESS_KEY: lookup('env', 'ANSIBLE_AWS_SECRET_KEY')
