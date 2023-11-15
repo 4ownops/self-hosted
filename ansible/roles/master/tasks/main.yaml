@@ -34,7 +34,7 @@
     AWS_SECRET_ACCESS_KEY: "lookup('env', 'ANSIBLE_AWS_SECRET_KEY')"
     AWS_DEFAULT_REGION: "eu-central-1"
   ansible.builtin.shell:
-    cmd: "aws configure set aws_access_key_id AWS_ACCESS_KEY_ID && aws configure set aws_secret_access_key AWS_SECRET_ACCESS_KEY && aws configure set default.region AWS_DEFAULT_REGION"
+    cmd: "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && aws configure set default.region $AWS_DEFAULT_REGION"
 
 - name: install k3s
   become: true
