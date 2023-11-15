@@ -10,6 +10,19 @@
    src: templates/config.yaml.j2
    dest: /etc/rancher/k3s.config.d/config.yaml
 
+- name: Install python
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    name: python3
+    state: present
+
+- name: Install boto3
+  ansible.builtin.pip:
+    name:
+      - boto3
+      - botocore
+
 - name: install k3s
   become: true
   run_once: true

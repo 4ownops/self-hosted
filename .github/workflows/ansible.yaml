@@ -28,7 +28,7 @@ jobs:
       with:
         aws-region: eu-central-1
         role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github_actions_ansible_role
-        role-session-name: aws
+        role-session-name: awss
     - name: Run Ansible Playbook
       env:
         K3S_TOKEN: ${{secrets.K3S_TOKEN}}
@@ -36,6 +36,5 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y ansible
-        pip install boto3 botocore
         cd ansible
         ansible-playbook -i inventory.yaml site.yaml --private-key=../private_key.pem --user=${{ secrets.ANSIBLE_USER }}
