@@ -17,6 +17,7 @@
     cmd: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
 
 - name: Create\update k3s token
+  become: true
   community.aws.ssm_parameter:
     name: "self_hosted/k3s_token"
     description: "token for k3s"
