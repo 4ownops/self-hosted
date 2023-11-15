@@ -36,5 +36,6 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y ansible
+        pip install boto3 botocore
         cd ansible
         ansible-playbook -i inventory.yaml site.yaml --private-key=../private_key.pem --user=${{ secrets.ANSIBLE_USER }}
