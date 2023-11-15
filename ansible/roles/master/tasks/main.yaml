@@ -42,8 +42,8 @@
 
 - name: AWS Create\update k3s token parameter
   environment:
-    AWS_ACCESS_KEY_ID: "${{ ANSIBLE_AWS_ACCESS_KEY }}"
-    AWS_SECRET_ACCESS_KEY: "${{ ANSIBLE_AWS_SECRET_KEY }}"
+    AWS_ACCESS_KEY_ID: "{{ ANSIBLE_AWS_ACCESS_KEY }}"
+    AWS_SECRET_ACCESS_KEY: "{{ ANSIBLE_AWS_SECRET_KEY }}"
     AWS_DEFAULT_REGION: "eu-central-1"
   community.aws.ssm_parameter:
     name: "/self_hosted/k3s_token"
