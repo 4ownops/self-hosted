@@ -39,9 +39,10 @@
     src: /var/lib/rancher/k3s/server/token
   register: token
 
-- name: Create\update k3s token
+- name: AWS Create\update k3s token parameter
   community.aws.ssm_parameter:
     name: "self_hosted/k3s_token"
     description: "token for k3s"
+    region: eu-central-1 
     string_type: "SecureString"
     value: "{{ token['content'] | b64decode }}"
