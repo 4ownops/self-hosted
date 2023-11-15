@@ -46,7 +46,7 @@
     AWS_SECRET_ACCESS_KEY: "${{ ANSIBLE_AWS_SECRET_KEY }}"
     AWS_DEFAULT_REGION: "eu-central-1"
   community.aws.ssm_parameter:
-    name: "self_hosted/k3s_token"
+    name: "/self_hosted/k3s_token"
     description: "token for k3s"
     region: eu-central-1 
     string_type: "SecureString"
