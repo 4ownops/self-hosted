@@ -14,7 +14,6 @@
   loop:
    - { path: /etc/rancher/k3s.config.d }
    - { path: /etc/rancher/k3s }
-   - { path: /var/regs/ }
 
 - name: copy kubelet.config
   become: true
