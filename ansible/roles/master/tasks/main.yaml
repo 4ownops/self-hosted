@@ -14,7 +14,12 @@
   become: true
   run_once: true
   ansible.builtin.shell:
-    cmd: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
+    cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
+
+- name: slurp token
+  ansible.builtin.slurp:
+    src: /var/lib/rancher/k3s/server/token
+  register: token
 
 - name: Create\update k3s token
   become: true
@@ -22,4 +27,4 @@
     name: "self_hosted/k3s_token"
     description: "token for k3s"
     string_type: "SecureString"
-    value: "{{lookup('ansible.builtin.file', '/var/lib/rancher/k3s/server/token') }}"
+    value: "{{ token['content'] | b64decode }}"
