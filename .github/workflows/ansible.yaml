@@ -18,11 +18,7 @@ jobs:
         endpoint: ${{ secrets.WG_ENDPOINT }}
         public_key: ${{ secrets.WG_PUBKEY }}
         private_key: ${{ secrets.WG_PRIVATE_KEY }}
-        preshared_key: ${{ secrets.WG_PRESHARED_KEY }}
-    - name: Setting up SSH key
-      run: |
-        echo "${{ secrets.ANSIBLE_USER_PRIVATE_KEY }}" > private_key.pem
-        chmod 600 private_key.pem
+        preshared_key: ${{ secrets.WG_PRESHARED_KEY }} 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -33,10 +29,12 @@ jobs:
       env:
         K3S_TOKEN: ${{ secrets.K3S_TOKEN }}
         ANSIBLE_HOST_KEY_CHECKING: "False"
-        ANSIBLE_AWS_ACCESS_KEY: ${{ secrets.ANSIBLE_AWS_ACCESS_KEY }}
-        ANSIBLE_AWS_SECRET_KEY: ${{ secrets.ANSIBLE_AWS_SECRET_KEY }}
       run: |
         sudo apt update
         sudo apt install -y ansible
         cd ansible
-        ansible-playbook -i inventory.yaml site.yaml --private-key=../private_key.pem --user=${{ secrets.ANSIBLE_USER }}
+        echo "${{ secrets.ANSIBLE_USER_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+        sed -i "s/\${ANSIBLE_AWS_ACCESS_KEY}/${{ secrets.ANSIBLE_AWS_ACCESS_KEY }}/g" group_vars/all
+        sed -i "s/\${ANSIBLE_AWS_SECRET_KEY}/${{ secrets.ANSIBLE_AWS_SECRET_KEY }}/g" group_vars/all
+        ansible-playbook -i inventory.yaml site.yaml --private-key=private_key.pem --user=${{ secrets.ANSIBLE_USER }}

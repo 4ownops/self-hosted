@@ -28,14 +28,6 @@
       - boto3
       - botocore
 
-- name: Configure AWS CLI
-  environment:
-    AWS_ACCESS_KEY_ID: "lookup('env', 'ANSIBLE_AWS_ACCESS_KEY')"
-    AWS_SECRET_ACCESS_KEY: "lookup('env', 'ANSIBLE_AWS_SECRET_KEY')"
-    AWS_DEFAULT_REGION: "eu-central-1"
-  ansible.builtin.shell:
-    cmd: "aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && aws configure set default.region $AWS_DEFAULT_REGION"
-
 - name: install k3s
   become: true
   run_once: true
@@ -49,6 +41,10 @@
   register: token
 
 - name: AWS Create\update k3s token parameter
+  environment:
+    AWS_ACCESS_KEY_ID: "${{ ANSIBLE_AWS_ACCESS_KEY }}"
+    AWS_SECRET_ACCESS_KEY: "${{ ANSIBLE_AWS_SECRET_KEY }}"
+    AWS_DEFAULT_REGION: "eu-central-1"
   community.aws.ssm_parameter:
     name: "self_hosted/k3s_token"
     description: "token for k3s"
