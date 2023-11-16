@@ -1,3 +1,10 @@
+- name: Install boto3 and botocore
+  pip:
+     name: "{{ item }}"
+  loop:
+    - boto3
+    - botocore
+
 - name: Get token
   environment:
     AWS_ACCESS_KEY_ID: "{{ ANSIBLE_AWS_ACCESS_KEY }}"
