@@ -32,6 +32,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y ansible
+        pip install boto3 botocore
         cd ansible
         echo "${{ secrets.ANSIBLE_USER_PRIVATE_KEY }}" > private_key.pem
         chmod 600 private_key.pem
