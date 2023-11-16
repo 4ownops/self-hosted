@@ -4,7 +4,7 @@
     AWS_SECRET_ACCESS_KEY: "{{ ANSIBLE_AWS_SECRET_KEY }}"
     AWS_DEFAULT_REGION: "eu-central-1"
   set_fact:
-    token: "{{ lookup('aws_ssm', '/self_hosted/k3s_token') }}"
+    token: "{{ lookup('amazon.aws.aws_ssm', '/self_hosted/k3s_token') }}"
 
 - name: Create k3s config.yaml
   become: true
