@@ -42,6 +42,7 @@
     value: "{{ token['content'] | b64decode }}"
 
 - name: Start k3s-cleanup.service
+  become: true
   ansible.builtin.service:
     name: k3s-cleanup.service
     enabled: yes
