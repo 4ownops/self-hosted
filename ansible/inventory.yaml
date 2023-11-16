@@ -1,7 +1,7 @@
 k3sagents:
   hosts:
     k3sagent03:
-      ansible_host: 192.168.0.41
+      ansible_host: 192.168.0.43
       hostname: k3sagent03
 
 k3smasters:

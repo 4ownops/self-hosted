@@ -1,0 +1,26 @@
+- name: Get token
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ ANSIBLE_AWS_ACCESS_KEY }}"
+    AWS_SECRET_ACCESS_KEY: "{{ ANSIBLE_AWS_SECRET_KEY }}"
+    AWS_DEFAULT_REGION: "eu-central-1"
+  set_fact:
+    token: "{{ lookup('aws_ssm', '/self_hosted/k3s_token') }}"
+
+- name: Create k3s config.yaml
+  become: true
+  ansible.builtin.template:
+   src: templates/config.yaml.j2
+   dest: /etc/rancher/k3s.config.d/config.yaml
+
+- name: Soft link to k3s config
+  become: true
+  ansible.builtin.file:
+   src: /etc/rancher/k3s.config.d/config.yaml
+   dest: /etc/rancher/k3s/config.yaml
+   state: link
+
+- name: Install k3s agent
+  become: true
+  run_once: true
+  ansible.builtin.shell:
+    cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - agent

@@ -1,40 +1,29 @@
-- name: copy cleanup service file
+- name: Copy cleanup service file
   become: true
   ansible.builtin.copy:
    src: files/k3s-cleanup.service
    dest: /lib/systemd/system/k3s-cleanup.service
 
-- name: create k3s config.yaml
+- name: Create k3s config.yaml
   become: true
   ansible.builtin.template:
    src: templates/config.yaml.j2
    dest: /etc/rancher/k3s.config.d/config.yaml
 
-- name: Install python
+- name: Soft link to k3s config
   become: true
-  ansible.builtin.apt:
-    update_cache: true
-    pkg: 
-      - python3
-      - python3-pip
-      - awscli
-    state: present
+  ansible.builtin.file:
+   src: /etc/rancher/k3s.config.d/config.yaml
+   dest: /etc/rancher/k3s/config.yaml
+   state: link
 
-- name: Install boto3
-  environment:
-    PIP_BREAK_SYSTEM_PACKAGES: "1"
-  ansible.builtin.pip:
-    name:
-      - boto3
-      - botocore
-
-- name: install k3s
+- name: Install k3s server
   become: true
   run_once: true
   ansible.builtin.shell:
     cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
 
-- name: slurp token
+- name: Slurp token
   become: true
   ansible.builtin.slurp:
     src: /var/lib/rancher/k3s/server/token
@@ -51,3 +40,10 @@
     region: eu-central-1 
     string_type: "SecureString"
     value: "{{ token['content'] | b64decode }}"
+
+- name: Start k3s-cleanup.service
+  ansible.builtin.service:
+    name: k3s-cleanup.service
+    enabled: yes
+    state: started
+
