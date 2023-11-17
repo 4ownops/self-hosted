@@ -1,0 +1,25 @@
+- name: Add stable chart repo
+  kubernetes.core.helm_repository:
+    name: metallb
+    repo_url: "https://metallb.github.io/metallb"
+
+- name: Deploy metallb
+  kubernetes.core.helm:
+    name: metallb
+    release_namespace: metallb-system
+    create_namespace: true
+    chart_ref: metallb/metallb
+    values: "{{ lookup('ansible.builtin.template', 'templates/metallb_config.yaml.j2') | from_yaml }}"
+
+#- name: Create a k8s namespace
+#  kubernetes.core.k8s:
+#    name: argocd
+#    api_version: v1
+#    kind: Namespace
+#    state: present
+#
+#- name: Argo-cd install
+#  kubernetes.core.k8s:
+#    namespaces: argocd
+#    state: present
+#    src: files/argocd_install.yaml
