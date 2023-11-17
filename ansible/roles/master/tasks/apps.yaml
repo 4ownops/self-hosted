@@ -13,13 +13,11 @@
     DESIRED_VERSION: "{{ helm_version | default('') }}"
 
 - name: Add stable chart repo
-  become: true
   kubernetes.core.helm_repository:
     name: metallb
     repo_url: "https://metallb.github.io/metallb"
 
 - name: Deploy metallb
-  become: true
   kubernetes.core.helm:
     name: metallb
     release_namespace: metallb-system

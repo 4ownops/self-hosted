@@ -48,6 +48,12 @@
     enabled: yes
     state: started
 
+- name: Change owner k3s.yaml
+  ansible.builtin.file:
+    path: /etc/rancher/k3s/k3s.yaml
+    owner: ansible_user
+    group: ansible_user
+
 - name: Log files rotation
   become: true
   ansible.builtin.template:
