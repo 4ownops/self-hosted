@@ -35,6 +35,9 @@ jobs:
         source /opt/pipx/venvs/ansible-core/bin/activate
         python -m pip install boto3 botocore
         deactivate
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        chmod 700 get_helm.sh
+        ./get_helm.sh
         cd ansible
         echo "${{ secrets.ANSIBLE_USER_PRIVATE_KEY }}" > private_key.pem
         chmod 600 private_key.pem
