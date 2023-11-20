@@ -1,3 +1,0 @@
-domain: home
-cluster_domain: k3s.home
-k3s_master_ip: 192.168.0.51
