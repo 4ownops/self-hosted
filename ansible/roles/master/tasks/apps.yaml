@@ -15,7 +15,7 @@
 - name: Add stable chart repo
   kubernetes.core.helm_repository:
     name: metallb
-    repo_url: "https://github.com/metallb"
+    repo_url: "https://metallb.github.io/metallb"
 
 - name: Deploy metallb
   kubernetes.core.helm:
