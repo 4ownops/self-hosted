@@ -16,15 +16,6 @@
   k8s:
     definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metallb') }}"
 
-#- name: Create a k8s namespace
-#  kubernetes.core.k8s:
-#    name: argocd
-#    api_version: v1
-#    kind: Namespace
-#    state: present
-#
-#- name: Argo-cd install
-#  kubernetes.core.k8s:
-#    namespaces: argocd
-#    state: present
-#    src: files/argocd_install.yaml
+- name: Install argocd
+  k8s:
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/argocd') }}"
