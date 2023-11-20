@@ -12,19 +12,9 @@
   environment:
     DESIRED_VERSION: "{{ helm_version | default('') }}"
 
-- name: Add stable chart repo
-  kubernetes.core.helm_repository:
-    name: metallb
-    repo_url: "https://metallb.github.io/metallb"
-
-- name: Deploy metallb
-  kubernetes.core.helm:
-    name: metallb
-    chart_version: 0.13.12
-    release_namespace: metallb-system
-    create_namespace: true
-    chart_ref: metallb/metallb
-    values: "{{ lookup('ansible.builtin.template', 'templates/metallb_config.yaml.j2') | from_yaml }}"
+- name: Install metallb
+  k8s:
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/metallb') }}"
 
 #- name: Create a k8s namespace
 #  kubernetes.core.k8s:
