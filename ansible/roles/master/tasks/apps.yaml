@@ -1,0 +1,30 @@
+- name: Download Helm command line tool
+  ansible.builtin.uri:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    return_content: true
+  register: helm_installer
+
+- name: Install Helm
+  ansible.builtin.command:
+    cmd: bash
+    stdin: "{{ helm_installer.content }}"
+    creates: /usr/local/bin/helm
+  environment:
+    DESIRED_VERSION: "{{ helm_version | default('') }}"
+
+- name: Install metallb
+  k8s:
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metallb') }}"
+
+#- name: Create a k8s namespace
+#  kubernetes.core.k8s:
+#    name: argocd
+#    api_version: v1
+#    kind: Namespace
+#    state: present
+#
+#- name: Argo-cd install
+#  kubernetes.core.k8s:
+#    namespaces: argocd
+#    state: present
+#    src: files/argocd_install.yaml

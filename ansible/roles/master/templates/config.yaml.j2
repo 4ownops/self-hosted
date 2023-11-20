@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 # k3sserver01
 
+=======
+>>>>>>> dev1
 cluster-domain: "{{ cluster_domain }}"
 tls-san:
     - "{{ inventory_hostname }}.{{ cluster_domain }}"
@@ -15,4 +18,9 @@ disable:
     - servicelb
 protect-kernel-defaults: true
 secrets-encryption: true
+<<<<<<< HEAD
 agent-token: "{{ lookup('env', 'secret.K3S_TOKEN' }}"
+=======
+agent-token: "{{ lookup('env', 'secret.K3S_TOKEN') }}"
+write-kubeconfig-mode: "0644"
+>>>>>>> dev1

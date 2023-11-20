@@ -1,0 +1,5 @@
+server: "https://{{ k3s_master_ip }}:6443"
+token: "{{ token }}"
+log: "/var/log/k3s.log"
+kubelet-arg: "config=/etc/rancher/k3s/kubelet.config"
+protect-kernel-defaults: true

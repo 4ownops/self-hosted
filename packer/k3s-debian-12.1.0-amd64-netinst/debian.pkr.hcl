@@ -137,6 +137,10 @@ build {
 
   provisioner "shell" {
     inline = [
+      "sysctl -p /etc/sysctl.d/80_tcp_hardening.conf"
+      "sysctl -p /etc/sysctl.d/85_kernel_optimizations.conf"
+      "sysctl -p /etc/sysctl.d/85_memory_optimizations.conf"
+      "sysctl -p /etc/sysctl.d/85_network_optimizations.conf"
       "cp /etc/default/grub /etc/default/grub.orig",
       "sed -i 's/GRUB_CMDLINE_LINUX=\"\"/GRUB_CMDLINE_LINUX=\"transparent_hugepage=never\"/g' /etc/default/grub",
       "update-grub",

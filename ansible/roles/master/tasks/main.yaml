@@ -1,24 +1,68 @@
-- name: copy cleanup service file
+- name: Copy cleanup service file
   become: true
   ansible.builtin.copy:
    src: files/k3s-cleanup.service
    dest: /lib/systemd/system/k3s-cleanup.service
 
-- name: create k3s config.yaml
+- name: Create k3s config.yaml
   become: true
   ansible.builtin.template:
    src: templates/config.yaml.j2
    dest: /etc/rancher/k3s.config.d/config.yaml
 
-- name: install k3s
+- name: Soft link to k3s config
+  become: true
+  ansible.builtin.file:
+   src: /etc/rancher/k3s.config.d/config.yaml
+   dest: /etc/rancher/k3s/config.yaml
+   state: link
+
+- name: Install k3s server
   become: true
   run_once: true
-  ansible.builtin.command:
-    cmd: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
+  ansible.builtin.shell:
+    cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
 
-- name: Create\update k3s token
+- name: Slurp token
+  become: true
+  ansible.builtin.slurp:
+    src: /var/lib/rancher/k3s/server/token
+  register: token
+
+- name: AWS Create\update k3s token parameter
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ ANSIBLE_AWS_ACCESS_KEY }}"
+    AWS_SECRET_ACCESS_KEY: "{{ ANSIBLE_AWS_SECRET_KEY }}"
+    AWS_DEFAULT_REGION: "eu-central-1"
   community.aws.ssm_parameter:
-    name: "self_hosted/k3s_token"
+    name: "/self_hosted/k3s_token"
     description: "token for k3s"
+    region: eu-central-1 
     string_type: "SecureString"
-    value: "{{lookup('ansible.builtin.file', '/var/lib/rancher/k3s/server/token') }}"
+    value: "{{ token['content'] | b64decode }}"
+
+- name: Start k3s-cleanup.service
+  become: true
+  ansible.builtin.service:
+    name: k3s-cleanup.service
+    enabled: yes
+    state: started
+
+- name: Change owner k3s.yaml
+  ansible.builtin.file:
+    path: /etc/rancher/k3s/k3s.yaml
+    owner: ansible_user
+    group: ansible_user
+
+- name: Log files rotation
+  become: true
+  ansible.builtin.template:
+   src: "templates/log_rotation.j2"
+   dest: "/etc/logrotate.d/{{ item.filename }}"
+  loop:
+   - { log_path: /var/log/k3s.log, filename: k3s }
+   - { log_path: /var/lib/rancher/k3s/agent/containerd/containerd.log, filename: k3s-containerd }
+
+- name: Include task list in play
+  ansible.builtin.include_tasks:
+    file: tasks/apps.yaml
