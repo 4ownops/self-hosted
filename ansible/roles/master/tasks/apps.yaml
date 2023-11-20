@@ -24,12 +24,6 @@
   k8s:
     definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metallb') }}"
 
-- name: Argocd config
-  local_action:
-    module: ansible.builtin.template
-    src: templates/ingress.yaml.j2
-    dest: roles/master/kustomization/argocd/configs/ingress.yaml
-
 - name: Install argocd
   k8s:
     definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/argocd') }}"
