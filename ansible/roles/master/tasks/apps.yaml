@@ -14,7 +14,7 @@
 
 - name: Install metallb
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='kustomization/metallb') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metallb') }}"
 
 #- name: Create a k8s namespace
 #  kubernetes.core.k8s:
