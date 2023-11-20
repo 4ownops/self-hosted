@@ -12,21 +12,4 @@ spec:
   type: LoadBalancer
   LoadBalancerIp: 192.168.0.150
 
----
-api_version: traefik.containo.us/v1alpha1
-kind: IngressRoute
-
-metadata:
-  name: argocd-http
-  namespace: argocd
-spec:
-  entryPoints:
-    - web
-  routes:
-    - match: Host(`192.168.0.150`) && Host(`argocd.home`)
-      kind: Rule
-      services:
-        - name: argocd-http
-          port: 80
-
 
