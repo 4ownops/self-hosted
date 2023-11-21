@@ -24,6 +24,18 @@
   k8s:
     definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metallb') }}"
 
-- name: Install argocd
+- name: Install metrics-server
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/argocd') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metrics_server') }}"
+
+- name: Install reflector
+  k8s:
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/reflector') }}"
+
+- name: Install cert manager
+  k8s:
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/cert_manager') }}"
+
+#- name: Install argocd
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/argocd') }}"
