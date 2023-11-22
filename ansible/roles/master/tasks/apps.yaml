@@ -20,9 +20,9 @@
   environment:
     DESIRED_VERSION: "{{ helm_version | default('') }}"
 
-- name: Install metallb
+- name: Install purelb
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metallb') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/purelb') }}"
 
 - name: Install metrics-server
   k8s:

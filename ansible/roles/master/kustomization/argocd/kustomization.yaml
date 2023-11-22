@@ -6,11 +6,11 @@ namespace: argocd
 resources:
 - resources/namespace.yaml
 - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-- resources/cert.yaml
+#- resources/cert.yaml
 
 patches:
   - target:
       kind: Service
       name: argocd-server
-    path: configs/patch.yaml
+    path: patches/patch.yaml
 
