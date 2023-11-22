@@ -4,11 +4,16 @@
    src: files/k3s-cleanup.service
    dest: /lib/systemd/system/k3s-cleanup.service
 
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
 - name: Create k3s config.yaml
   become: true
   ansible.builtin.template:
    src: templates/config.yaml.j2
    dest: /etc/rancher/k3s.config.d/config.yaml
+  notify: 
+    - Restart k3s
 
 - name: Soft link to k3s config
   become: true
