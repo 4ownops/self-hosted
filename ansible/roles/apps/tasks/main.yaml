@@ -21,21 +21,39 @@
     DESIRED_VERSION: "{{ helm_version | default('') }}"
 
 - name: Install metrics-server
-  k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/metrics_server') }}"
-
+  ansible.builtin.shell: kubectl apply -k roles/apps/kustomization/metrics_server
+  args:
+    executable: /bin/bash
 
 - name: Install purelb
-  k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/purelb') }}"
+  ansible.builtin.shell: kubectl apply -k roles/apps/kustomization/purelb
+  args:
+    executable: /bin/bash
 
 - name: Install reflector
-  k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/reflector') }}"
+  ansible.builtin.shell: kubectl apply -k roles/apps/kustomization/reflector
+  args:
+    executable: /bin/bash
 
-- name: Install cert manager
-  k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/cert_manager') }}"
+- name: Install cert-manager
+  ansible.builtin.shell: kubectl apply -k roles/apps/kustomization/cert_manager
+  args:
+    executable: /bin/bash
+#- name: Install metrics-server
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/metrics_server') }}"#
+
+#- name: Install purelb
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/purelb') }}"#
+
+#- name: Install reflector
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/reflector') }}"#
+
+#- name: Install cert manager
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/cert_manager') }}"#
 
 - name: Set up ingress resource
   local_action:
@@ -47,5 +65,9 @@
    - { resource_name: cert }
 
 - name: Install argocd
-  k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/argocd') }}"
+  ansible.builtin.shell: kubectl apply -k roles/apps/kustomization/argocd
+  args:
+    executable: /bin/bash
+#- name: Install argocd
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/argocd') }}"
