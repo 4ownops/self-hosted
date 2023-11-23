@@ -1,0 +1,19 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+
+metadata:
+  name: argocd-https
+  namespace: argocd
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    secretName: argocd-server-ssl
+    certResolver: letsencrypt
+  routes:
+  - match: (Host(`argocd.***REMOVED***`))
+    kind: Rule
+    services:
+    - name: argocd-server
+      port: 443
