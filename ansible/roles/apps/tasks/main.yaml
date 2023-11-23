@@ -39,7 +39,7 @@
     executable: /bin/bash
 
 - name: Install purelb
-  ansible.builtin.shell: kubectl apply -k kustomization/purelb
+  ansible.builtin.shell: kubectl apply -k kustomization/purelb --validate=false
   args:
     executable: /bin/bash
 
