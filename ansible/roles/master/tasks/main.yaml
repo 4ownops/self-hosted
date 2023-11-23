@@ -54,6 +54,7 @@
     state: started
 
 - name: Change owner k3s.yaml
+  become: true
   ansible.builtin.file:
     path: /etc/rancher/k3s/k3s.yaml
     owner: ansible_user
