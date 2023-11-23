@@ -15,3 +15,9 @@
   remote_user: ansible_user
   roles:
     - agent
+
+- name: install k3s apps
+  hosts: k3smasters
+  remote_user: ansible_user
+  roles:
+    - apps
