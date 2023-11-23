@@ -20,13 +20,14 @@
   environment:
     DESIRED_VERSION: "{{ helm_version | default('') }}"
 
-- name: Install purelb
-  k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/purelb') }}"
-
 - name: Install metrics-server
   k8s:
     definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/metrics_server') }}"
+
+
+- name: Install purelb
+  k8s:
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/purelb') }}"
 
 - name: Install reflector
   k8s:
