@@ -10,10 +10,17 @@ spec:
     - websecure
   tls:
     secretName: argocd-server-ssl
-    certResolver: letsencrypt
   routes:
-  - match: Host(`argocd.home`) && Host(`argocd.{{ external_domain }}`)
-    kind: Rule
+  - kind: Rule
+    match: Host(`argocd.{{ external_domain }}`) && Host(`argocd.home`)
+    priority: 10
     services:
-    - name: argocd-server
-      port: 443
+      - name: argocd-server
+        port: 80
+  - kind: Rule
+    match: Host(`argocd.{{ external_domain }}`) && Host(`argocd.home`) && Headers(`Content-Type`, `application/grpc`)
+    priority: 11
+    services:
+      - name: argocd-server
+        port: 80
+        scheme: h2c
