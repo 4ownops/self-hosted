@@ -38,9 +38,9 @@
 
 - name: Set up ingress resource
   local_action:
-    ansible.builtin.template:
-     src: "templates/argocd_{{ item.resource_name }}.yaml.j2"
-     dest: "ansible/roles/apps/argocd/resources/{{ item.resource_name }}.yaml"
+    module: ansible.builtin.template
+    src: "templates/argocd_{{ item.resource_name }}.yaml.j2"
+    dest: "ansible/roles/apps/argocd/resources/{{ item.resource_name }}.yaml"
   loop:
    - { resource_name: ingress }
    - { resource_name: cert }
