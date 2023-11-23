@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-server
   annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.0.182
+    purelb.io/service-group: default
 spec:
   ports:
   - name: http
@@ -21,3 +21,4 @@ spec:
   selector:
     app.kubernetes.io/name: argocd-server
   type: LoadBalancer
+  loadBalancerIP: 192.168.0.182
