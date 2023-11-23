@@ -36,6 +36,6 @@
   k8s:
     definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/cert_manager') }}"
 
-#- name: Install argocd
-#  k8s:
-#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/argocd') }}"
+- name: Install argocd
+  k8s:
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/argocd') }}"
