@@ -22,7 +22,7 @@
 
 - name: Copy apps
   ansible.builtin.copy:
-    src: kustomization
+    src: kustomization/
     dest: kustomization
 
 - name: Set up ingress resource
