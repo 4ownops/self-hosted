@@ -22,20 +22,29 @@
 
 - name: Install purelb
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/purelb') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/purelb') }}"
 
 - name: Install metrics-server
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/metrics_server') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/metrics_server') }}"
 
 - name: Install reflector
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/reflector') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/reflector') }}"
 
 - name: Install cert manager
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/cert_manager') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/cert_manager') }}"
+
+- name: Set up ingress resource
+  local_action:
+    ansible.builtin.template:
+     src: "templates/argocd_{{ item.resource_name }}.yaml.j2"
+     dest: "ansible/roles/apps/argocd/resources/{{ item.resource_name }}.yaml"
+  loop:
+   - { resource_name: ingress }
+   - { resource_name: cert }
 
 - name: Install argocd
   k8s:
-    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/master/kustomization/argocd') }}"
+    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/argocd') }}"

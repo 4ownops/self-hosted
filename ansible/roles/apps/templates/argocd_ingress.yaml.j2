@@ -12,7 +12,7 @@ spec:
     secretName: argocd-server-ssl
     certResolver: letsencrypt
   routes:
-  - match: (Host(`argocd.hellston.com`))
+  - match: Host(`argocd.home`) && Host(`argocd.{{ external_domain }}`)
     kind: Rule
     services:
     - name: argocd-server

@@ -68,7 +68,3 @@
   loop:
    - { log_path: /var/log/k3s.log, filename: k3s }
    - { log_path: /var/lib/rancher/k3s/agent/containerd/containerd.log, filename: k3s-containerd }
-
-- name: Include task list in play
-  ansible.builtin.include_tasks:
-    file: tasks/apps.yaml
