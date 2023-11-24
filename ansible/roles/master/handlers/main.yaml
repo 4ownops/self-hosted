@@ -18,4 +18,4 @@
   ansible.builtin.service:
     name: k3s
     state: restarted
-  when: k3s.service in ansible_facts.services
+  when: "'k3s.service' in ansible_facts.services"
