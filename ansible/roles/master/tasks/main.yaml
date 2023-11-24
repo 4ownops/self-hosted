@@ -27,7 +27,7 @@
   run_once: true
   ansible.builtin.shell:
     cmd: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="{{ k3s_version }}" sh -s - server
-  when: k3s.service not in ansible_facts.services
+  when: "'k3s.service' not in ansible_facts.services"
 
 - name: Slurp token
   become: true
