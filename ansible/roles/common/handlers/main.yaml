@@ -4,6 +4,7 @@
   poll: 0
   ignore_errors: true
   become: true
+  
 - name: Wait for server to restart
   local_action:
     module: wait_for
