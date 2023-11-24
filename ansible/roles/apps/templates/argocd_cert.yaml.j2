@@ -1,0 +1,13 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd.{{ external_domain }}-prod-cert
+spec:
+  secretName: argocd-server-ssl
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - argocd.{{ external_domain }}
+    

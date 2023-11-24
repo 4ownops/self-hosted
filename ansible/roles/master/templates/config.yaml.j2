@@ -15,3 +15,7 @@ protect-kernel-defaults: true
 secrets-encryption: true
 agent-token: "{{ lookup('env', 'secret.K3S_TOKEN') }}"
 write-kubeconfig-mode: "0644"
+kube-proxy-arg:
+    - proxy-mode=ipvs
+    - ipvs-strict-arp=true
+    

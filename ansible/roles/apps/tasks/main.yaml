@@ -1,0 +1,77 @@
+- name: Get domain
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ ANSIBLE_AWS_ACCESS_KEY }}"
+    AWS_SECRET_ACCESS_KEY: "{{ ANSIBLE_AWS_SECRET_KEY }}"
+    AWS_DEFAULT_REGION: "eu-central-1"
+  set_fact:
+    external_domain: "{{ lookup('amazon.aws.aws_ssm', '/self_hosted/external_domain_name') }}"
+
+- name: Download Helm command line tool
+  ansible.builtin.uri:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    return_content: true
+  register: helm_installer
+
+- name: Install Helm
+  ansible.builtin.command:
+    cmd: bash
+    stdin: "{{ helm_installer.content }}"
+    creates: /usr/local/bin/helm
+  environment:
+    DESIRED_VERSION: "{{ helm_version | default('') }}"
+
+- name: Copy apps
+  ansible.builtin.copy:
+    src: kustomization/
+    dest: kustomization
+
+- name: Set up ingress resource
+  ansible.builtin.template:
+    src: "templates/argocd_{{ item.resource_name }}.yaml.j2"
+    dest: "kustomization/argocd/resources/{{ item.resource_name }}.yaml"
+  loop:
+   - { resource_name: ingress }
+   - { resource_name: cert }
+
+- name: Install metrics-server
+  ansible.builtin.shell: kubectl apply -k kustomization/metrics_server
+  args:
+    executable: /bin/bash
+
+- name: Install purelb
+  ansible.builtin.shell: kubectl apply -k kustomization/purelb --validate=false
+  args:
+    executable: /bin/bash
+
+- name: Install reflector
+  ansible.builtin.shell: kubectl apply -k kustomization/reflector
+  args:
+    executable: /bin/bash
+
+- name: Install cert-manager
+  ansible.builtin.shell: kubectl apply -k kustomization/cert_manager
+  args:
+    executable: /bin/bash
+#- name: Install metrics-server
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/metrics_server') }}"#
+
+#- name: Install purelb
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/purelb') }}"#
+
+#- name: Install reflector
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/reflector') }}"#
+
+#- name: Install cert manager
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/cert_manager') }}"#
+
+- name: Install argocd
+  ansible.builtin.shell: kubectl apply -k kustomization/argocd
+  args:
+    executable: /bin/bash
+#- name: Install argocd
+#  k8s:
+#    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/argocd') }}"
