@@ -4,6 +4,7 @@
   poll: 0
   ignore_errors: true
   become: true
+
 - name: Wait for server to restart
   local_action:
     module: wait_for
@@ -12,3 +13,9 @@
       delay=10
     become: false
  
+- name: Restart k3s
+  become: true
+  ansible.builtin.service:
+    name: k3s
+    state: restarted
+  when: ansible_facts.services['k3s.service']

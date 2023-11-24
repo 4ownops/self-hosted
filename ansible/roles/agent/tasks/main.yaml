@@ -23,4 +23,4 @@
   become: true
   run_once: true
   ansible.builtin.shell:
-    cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - agent
+    cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="{{ k3s_version }}" sh -s - agent

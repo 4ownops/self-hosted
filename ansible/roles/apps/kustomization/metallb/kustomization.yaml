@@ -1,4 +1,3 @@
-# MetalLB setup
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -6,4 +5,4 @@ namespace: metallb-system
 
 resources:
 - github.com/metallb/metallb/config/native?ref=v0.13.12
-- configs/config
+- resources/config

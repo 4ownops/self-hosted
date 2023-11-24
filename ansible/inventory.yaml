@@ -9,4 +9,3 @@ k3smasters:
     k3smaster01:
       ansible_host: 192.168.0.51
       hostname: k3smaster01
-

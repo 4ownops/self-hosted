@@ -4,11 +4,16 @@
    src: files/k3s-cleanup.service
    dest: /lib/systemd/system/k3s-cleanup.service
 
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
 - name: Create k3s config.yaml
   become: true
   ansible.builtin.template:
    src: templates/config.yaml.j2
    dest: /etc/rancher/k3s.config.d/config.yaml
+  notify: 
+    - Restart k3s
 
 - name: Soft link to k3s config
   become: true
@@ -21,7 +26,7 @@
   become: true
   run_once: true
   ansible.builtin.shell:
-    cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="v1.28.3+k3s1" sh -s - server
+    cmd: kubectl get nodes -o custom-columns="CONTROL-PLANE:metadata.labels.node-role\.kubernetes\.io/control-plane" | grep true || wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="{{ k3s_version }}" sh -s - server
 
 - name: Slurp token
   become: true
@@ -49,6 +54,7 @@
     state: started
 
 - name: Change owner k3s.yaml
+  become: true
   ansible.builtin.file:
     path: /etc/rancher/k3s/k3s.yaml
     owner: ansible_user
@@ -62,7 +68,3 @@
   loop:
    - { log_path: /var/log/k3s.log, filename: k3s }
    - { log_path: /var/lib/rancher/k3s/agent/containerd/containerd.log, filename: k3s-containerd }
-
-- name: Include task list in play
-  ansible.builtin.include_tasks:
-    file: tasks/apps.yaml
