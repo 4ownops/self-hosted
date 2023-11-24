@@ -1,4 +1,4 @@
-server: "https://{{ k3s_master_ip }}:6443"
+server: "https://{{ hostvars[ 'k3smaster01' ].ansible_default_ipv4.address }}:6443"
 token: "{{ token }}"
 log: "/var/log/k3s.log"
 kubelet-arg: "config=/etc/rancher/k3s/kubelet.config"
