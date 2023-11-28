@@ -41,4 +41,5 @@ jobs:
         chmod 600 private_key.pem
         sed -i "s/\${ANSIBLE_AWS_ACCESS_KEY}/${{ secrets.ANSIBLE_AWS_ACCESS_KEY }}/g" group_vars/all
         sed -i "s/\${ANSIBLE_AWS_SECRET_KEY}/${{ secrets.ANSIBLE_AWS_SECRET_KEY }}/g" group_vars/all
+        sed -i "s/\${OWNER_EMAIL}/${{ secrets.OWNER_EMAIL }}/g" group_vars/all
         ansible-playbook -i inventory.yaml site.yaml --private-key=private_key.pem --user=${{ secrets.ANSIBLE_USER }}

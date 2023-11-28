@@ -6,29 +6,24 @@
   set_fact:
     external_domain: "{{ lookup('amazon.aws.aws_ssm', '/self_hosted/external_domain_name') }}"
 
-- name: Download Helm command line tool
-  ansible.builtin.uri:
-    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-    return_content: true
-  register: helm_installer
-
-- name: Install Helm
-  ansible.builtin.command:
-    cmd: bash
-    stdin: "{{ helm_installer.content }}"
-    creates: /usr/local/bin/helm
-  environment:
-    DESIRED_VERSION: "{{ helm_version | default('') }}"
-
 - name: Copy apps
   ansible.builtin.copy:
     src: kustomization/
     dest: kustomization
 
-- name: Set up ingress resource
+- name: Set up resources
   ansible.builtin.template:
-    src: "templates/argocd_{{ item.resource_name }}.yaml.j2"
-    dest: "kustomization/argocd/resources/{{ item.resource_name }}.yaml"
+    src: "templates/{{ item.app }}_{{ item.resource_name }}.yaml.j2"
+    dest: "kustomization/{{ item.app }}/resources/{{ item.resource_name }}.yaml"
+  loop:
+   - { app: argocd, resource_name: ingress }
+   - { app: argocd, resource_name: cert }
+   - { app: cert_manager, resource_name: cluster_issuer_letsencrypt }
+
+- name: Set up cert-manager
+  ansible.builtin.template:
+    src: "templates/cluster_issuer_letsencrypt.yaml.j2"
+    dest: "kustomization/cert_manager/resources/{{ item.resource_name }}.yaml"
   loop:
    - { resource_name: ingress }
    - { resource_name: cert }

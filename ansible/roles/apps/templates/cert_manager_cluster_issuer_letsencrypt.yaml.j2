@@ -5,9 +5,9 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: tomas.vkz@gmail.com
+    email: {{ owner_email }}
     privateKeySecretRef:
-      name: hellston-account-private-stg-key
+      name: cert-man-account-private-stg-key
     solvers:
       - http01:
           ingress:
@@ -20,9 +20,9 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: tomas.vkz@gmail.com
+    email: {{ owner_email }}
     privateKeySecretRef:
-      name: hellston-account-private-prod-key
+      name: cert-man-account-private-prod-key
     solvers:
       - http01:
           ingress:
