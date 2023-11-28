@@ -1,5 +1,6 @@
 domain: home
 cluster_domain: k3s.home
 k3s_version: v1.22.3+k3s1
+owner_email: ${OWNER_EMAIL}
 ANSIBLE_AWS_ACCESS_KEY: ${ANSIBLE_AWS_ACCESS_KEY}
 ANSIBLE_AWS_SECRET_KEY: ${ANSIBLE_AWS_SECRET_KEY}
