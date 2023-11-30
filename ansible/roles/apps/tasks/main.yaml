@@ -39,6 +39,11 @@
   ansible.builtin.shell: kubectl apply -k kustomization/cert_manager
   args:
     executable: /bin/bash
+
+- name: Traefik options
+  ansible.builtin.shell: kubectl apply -k kustomization/traefik
+  args:
+    executable: /bin/bash
 #- name: Install metrics-server
 #  k8s:
 #    definition: "{{ lookup('kubernetes.core.kustomize', dir='roles/apps/kustomization/metrics_server') }}"#
