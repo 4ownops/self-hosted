@@ -30,7 +30,7 @@
   when: "'k3s-agent.service' not in ansible_facts.services"
 
 - name: Label node
-  ansible.builtin.shell: kubectl label nodes {{ hostname }} {{ item }}
+  ansible.builtin.shell: kubectl label nodes {{ hostname }} {{ item }} --overwrite
   args:
     executable: /bin/bash
   delegate_to: k3smaster01
