@@ -34,7 +34,8 @@ spec:
     - websecure
   tls:
     secretName: argocd-server-ssl
-    name: tlsoptions
+    options:
+      name: tlsoptions
   routes:
   - kind: Rule
     match: (Host(`argocd.{{ external_domain }}`) || Host(`argocd.home`))
