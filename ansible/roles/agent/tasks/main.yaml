@@ -6,6 +6,15 @@
   set_fact:
     token: "{{ lookup('amazon.aws.aws_ssm', '/self_hosted/k3s_token') }}"
 
+- name: Mount up device
+  when: mount is defined
+  ansible.posix.mount:
+    path: {{ item.path }}
+    src: {{ item.hw_label }}
+    fstype: {{ item.fstype }}
+    state: {{ item.state }}
+  loop: "{{ mount }}"
+
 - name: Create k3s config.yaml
   become: true
   ansible.builtin.template:

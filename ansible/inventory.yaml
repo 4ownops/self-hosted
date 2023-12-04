@@ -4,6 +4,11 @@ k3sagents:
       ansible_host: 192.168.0.43
       hostname: k3sagent03
       labels: [ share=true ]
+      mount:
+        - state: mounted
+          hw_label: /dev/sda1
+          path: /mnt/shared
+          fstype: ext4
 
 k3smasters:
   hosts:
