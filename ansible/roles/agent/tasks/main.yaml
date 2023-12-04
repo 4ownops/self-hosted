@@ -9,10 +9,10 @@
 - name: Mount up device
   when: mount is defined
   ansible.posix.mount:
-    path: {{ item.path }}
-    src: {{ item.hw_label }}
-    fstype: {{ item.fstype }}
-    state: {{ item.state }}
+    path: "{{ item.path }}"
+    src: "{{ item.hw_label }}"
+    fstype: "{{ item.fstype }}"
+    state: "{{ item.state }}"
   loop: "{{ mount }}"
 
 - name: Create k3s config.yaml
