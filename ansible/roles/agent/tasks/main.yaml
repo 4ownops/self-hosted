@@ -7,6 +7,7 @@
     token: "{{ lookup('amazon.aws.aws_ssm', '/self_hosted/k3s_token') }}"
 
 - name: Mount up device
+  become: true
   when: mount is defined
   ansible.posix.mount:
     path: "{{ item.path }}"
