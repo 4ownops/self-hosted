@@ -6,6 +6,7 @@ namespace: argocd
 resources:
 - resources/namespace.yaml
 - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+- resources/kustomize-with-helm.yaml
 - resources/cert.yaml
 - resources/ingress.yaml
 
@@ -14,4 +15,5 @@ patches:
       kind: ConfigMap
       name: argocd-cmd-params-cm
     path: patches/patch.yaml
+  - path: kustomize-with-helm-sidecar.yaml
 
