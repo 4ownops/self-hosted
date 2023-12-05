@@ -15,5 +15,5 @@ patches:
       kind: ConfigMap
       name: argocd-cmd-params-cm
     path: patches/patch.yaml
-  - path: kustomize-with-helm-sidecar.yaml
+  - path: patches/kustomize-with-helm-sidecar.yaml
 
