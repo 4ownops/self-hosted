@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
 - 'https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml'
-- resources/namespace.yaml
-- resources/cluster_issuer_selfsigned.yaml
-- resources/cluster_issuer_letsencrypt.yaml
-- resources/wildcard_home_certificate.yaml
+- resources/certificates.namespace.yaml
+- resources/cluster-issuer-selfsigned.yaml
+- resources/cluster-issuer-letsencrypt.yaml
+- resources/wildcard.home.certificate.yaml
