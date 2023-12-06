@@ -20,7 +20,7 @@ spec:
       - name: argocd-server
         port: 80
   - kind: Rule
-    match: (Host(`argocd.{{ external_domain }}`) && Headers(`Content-Type`, `application/grpc`))
+    match: (Host(`argocd.{{ external_domain }}`) || Host(`argocd.home) && Headers(`Content-Type`, `application/grpc`))
     priority: 11
     services:
       - name: argocd-server
