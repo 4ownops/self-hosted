@@ -34,7 +34,6 @@
 
 - name: Install k3s agent
   become: true
-  run_once: true
   ansible.builtin.shell:
     cmd: wget -qO - https://get.k3s.io | INSTALL_K3S_VERSION="{{ k3s_version }}" sh -s - agent
   when: "'k3s-agent.service' not in ansible_facts.services"
