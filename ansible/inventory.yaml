@@ -9,6 +9,9 @@ k3sagents:
           hw_label: /dev/sda1
           path: /mnt/shared
           fstype: ext4
+    k3sagent02:
+      ansible_host: 192.168.0.25
+      hostname: k3sagent02
 
 k3smasters:
   hosts:
